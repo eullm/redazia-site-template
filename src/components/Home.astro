@@ -1,0 +1,72 @@
+---
+import Card from './Card.astro';
+import { SITE, THEME, sectionLabel, sectionOf, sectionUrl, t, type Article, type Lang } from '../lib/site';
+
+interface Props { list: Article[]; lang: Lang; title?: string; bySection?: boolean; emptyText?: string; demo?: boolean }
+const { list, lang, title, bySection = false, emptyText, demo = false } = Astro.props;
+const s = t(lang);
+const home = THEME.home;
+const [lead, ...rest] = list;
+const groups = bySection && (home === 'front' || home === 'grid')
+  ? SITE.sections.map((x) => ({ x, items: list.slice(1).filter((a) => sectionOf(a) === x).slice(0, 3) })).filter((g) => g.items.length)
+  : [];
+---
+{title && <h1 class="page-title">{title}</h1>}
+{demo && <p class="demo-note">{s.demo}</p>}
+{!lead ? <p class="empty">{emptyText || s.empty}</p> : (
+  <div class={`home home-${home}`}>
+    {home === 'front' && (
+      <>
+        <section class="top">
+          <Card article={lead} size="lead" eager />
+          {rest.length > 0 && <div class="side">{rest.slice(0, 4).map((a) => <Card article={a} size="small" />)}</div>}
+        </section>
+        {rest.length > 4 && <section class="grid">{rest.slice(4, 16).map((a) => <Card article={a} />)}</section>}
+      </>
+    )}
+    {home === 'grid' && (
+      <>
+        <section class={`hero ${THEME.hero || 'split'}`}><Card article={lead} size="lead" eager /></section>
+        {rest.length > 0 && <section class="grid">{rest.slice(0, 15).map((a) => <Card article={a} />)}</section>}
+      </>
+    )}
+    {home === 'list' && <section class="column">{list.slice(0, 30).map((a, i) => <Card article={a} size="row" eager={i < 2} />)}</section>}
+    {home === 'stream' && <section class="column">{list.slice(0, 60).map((a) => <Card article={a} size="text" />)}</section>}
+    {groups.map((g) => (
+      <section class="group">
+        <h2 class="group-title"><a href={sectionUrl(g.x, lang)}>{sectionLabel(g.x, lang)}</a></h2>
+        <div class="grid three">{g.items.map((a) => <Card article={a} />)}</div>
+      </section>
+    ))}
+  </div>
+)}
+
+<style>
+  .top { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+  .side { display: flex; flex-direction: column; gap: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; padding: 32px 0; }
+  .hero :global(.card) { display: grid; grid-template-columns: 3fr 2fr; gap: 32px; align-items: center; }
+  .hero :global(.pic) { aspect-ratio: 3 / 2; }
+  .hero { padding-bottom: 8px; }
+  .hero.overlay :global(.card) { display: block; position: relative; border-radius: var(--radius); overflow: hidden; }
+  .hero.overlay :global(.pic) { aspect-ratio: 21 / 9; border-radius: 0; }
+  .hero.overlay :global(.txt) { position: absolute; inset: auto 0 0 0; padding: 120px 40px 32px; color: #fff;
+    background: linear-gradient(to top, rgba(0, 0, 0, .78), rgba(0, 0, 0, .45) 60%, transparent); }
+  .hero.overlay :global(.txt .kicker), .hero.overlay :global(.txt .desc), .hero.overlay :global(.txt .meta) { color: #fff; }
+  .hero.overlay :global(.title) { max-width: 820px; color: #fff; }
+  .hero.overlay :global(.desc) { max-width: 720px; opacity: .92; }
+  .column { max-width: 820px; margin: 0 auto; }
+  .home-list .column :global(.card:first-child) { padding-top: 0; }
+  .group { border-top: 3px solid var(--ink); padding-top: 10px; margin-top: 12px; }
+  .group-title { margin: 0; font-size: 24px; }
+  .group-title a { text-decoration: none; }
+  .group .grid { padding-top: 18px; }
+  @media (max-width: 900px) {
+    .top, .hero :global(.card) { grid-template-columns: 1fr; gap: 20px; }
+    .hero.overlay :global(.pic) { aspect-ratio: 4 / 3; }
+    .hero.overlay :global(.txt) { padding: 80px 20px 20px; }
+    .hero.overlay :global(.desc) { display: none; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+</style>

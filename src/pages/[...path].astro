@@ -1,0 +1,88 @@
+---
+// Every page of the site, in every language: the home, the articles, the
+// sections and "About". The main language is at the root, the others
+// under /<language>/; the words in the addresses come from site.config.mjs.
+import Layout from '../layouts/Layout.astro';
+import Home from '../components/Home.astro';
+import ArticlePage from '../components/ArticlePage.astro';
+import About from '../components/About.astro';
+import {
+  LANGS, MAIN, SITE, absolute, articleUrl, articles, asset, href, paths, sectionLabel, sectionOf, sectionSlug, slugOf,
+  t, tagline, type Article, type Lang, type Section,
+} from '../lib/site';
+
+type Page =
+  | { kind: 'home'; lang: Lang; list: Article[]; demo: boolean }
+  | { kind: 'article'; lang: Lang; article: Article; related: Article[] }
+  | { kind: 'section'; lang: Lang; section: Section; list: Article[]; demo: boolean }
+  | { kind: 'about'; lang: Lang };
+
+export async function getStaticPaths() {
+  const out: { params: { path: string | undefined }; props: Page }[] = [];
+  const at = (lang: Lang, ...parts: string[]) => {
+    const p = [lang === MAIN ? '' : lang, ...parts].filter(Boolean).join('/');
+    return p || undefined;
+  };
+  for (const lang of LANGS) {
+    const { list, demo } = await articles(lang);
+    const p = paths(lang);
+    out.push({ params: { path: at(lang) }, props: { kind: 'home', lang, list, demo } });
+    out.push({ params: { path: at(lang, p.about) }, props: { kind: 'about', lang } });
+    for (const section of SITE.sections) {
+      const inSection = list.filter((a) => sectionOf(a) === section);
+      out.push({ params: { path: at(lang, p.section, sectionSlug(section, lang)) },
+                 props: { kind: 'section', lang, section, list: inSection, demo: demo && inSection.length > 0 } });
+    }
+    for (const article of list) {
+      const section = sectionOf(article);
+      const near = list.filter((a) => a !== article && section && sectionOf(a) === section);
+      const related = [...near, ...list.filter((a) => a !== article && !near.includes(a))].slice(0, 3);
+      out.push({ params: { path: at(lang, p.article, slugOf(article)) }, props: { kind: 'article', lang, article, related } });
+    }
+  }
+  return out;
+}
+
+const page = Astro.props as Page;
+const lang = page.lang;
+const s = t(lang);
+let title: string | undefined;
+let description: string | undefined;
+let jsonld: object | undefined;
+if (page.kind === 'article') {
+  const a = page.article.data;
+  title = a.title;
+  description = a.description;
+  const section = sectionOf(page.article);
+  jsonld = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: a.title,
+    description: a.description,
+    datePublished: a.date.toISOString(),
+    inLanguage: lang,
+    mainEntityOfPage: absolute(articleUrl(page.article)),
+    image: a.image ? [absolute(asset(a.image)!)] : undefined,
+    articleSection: section ? sectionLabel(section, lang) : undefined,
+    keywords: a.keywords?.join(', '),
+    author: SITE.ai === 'automatic'
+      ? { '@type': 'Organization', name: `${SITE.name} AI newsroom`, url: absolute(href(lang, paths(lang).about)) }
+      : { '@type': 'Organization', name: a.author || SITE.name, url: absolute(href(lang)) },
+    publisher: { '@type': 'Organization', name: SITE.publisher.name || SITE.name, url: SITE.publisher.url || SITE.url },
+  };
+} else if (page.kind === 'section') {
+  title = sectionLabel(page.section, lang);
+} else if (page.kind === 'about') {
+  title = s.about;
+} else {
+  jsonld = { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: absolute(href(lang)),
+             description: tagline(lang) || undefined, inLanguage: lang };
+}
+---
+<Layout lang={lang} title={title} description={description} image={page.kind === 'article' ? page.article.data.image : undefined}
+        type={page.kind === 'article' ? 'article' : 'website'} jsonld={jsonld}>
+  {page.kind === 'home' && <><h1 class="sr-only">{SITE.name}</h1><Home list={page.list} lang={lang} bySection demo={page.demo} /></>}
+  {page.kind === 'section' && <Home list={page.list} lang={lang} title={title} emptyText={s.emptySection} demo={page.demo} />}
+  {page.kind === 'article' && <ArticlePage article={page.article} related={page.related} />}
+  {page.kind === 'about' && <About lang={lang} />}
+</Layout>

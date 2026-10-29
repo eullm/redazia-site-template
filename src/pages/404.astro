@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { MAIN, href, t } from '../lib/site';
+
+const s = t(MAIN);
+---
+<Layout lang={MAIN} title={s.notFound}>
+  <h1 class="page-title">{s.notFound}</h1>
+  <p>{s.notFoundText}</p>
+  <p><a href={href(MAIN)}>{s.backHome}</a></p>
+</Layout>
