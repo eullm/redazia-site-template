@@ -1,0 +1,73 @@
+---
+import { render } from 'astro:content';
+import Card from './Card.astro';
+import { SITE, absolute, articleUrl, asset, formatDate, href, langOf, paths, sectionLabel, sectionOf, sectionUrl, t, type Article } from '../lib/site';
+
+interface Props { article: Article; related: Article[] }
+const { article, related } = Astro.props;
+const lang = langOf(article);
+const s = t(lang);
+const { Content } = await render(article);
+const section = sectionOf(article);
+const img = asset(article.data.image);
+const automatic = SITE.ai === 'automatic';
+const about = href(lang, paths(lang).about);
+---
+<article class="story">
+  <header>
+    {section && <a class="kicker" href={sectionUrl(section, lang)}>{sectionLabel(section, lang)}</a>}
+    <h1>{article.data.title}</h1>
+    {article.data.description && <p class="standfirst">{article.data.description}</p>}
+    <p class="meta">
+      {s.published} <time datetime={article.data.date.toISOString()}>{formatDate(article.data.date, lang)}</time>
+      {article.data.author && <>{' · '}{article.data.author}</>}
+      {' · '}<a class="ai-tag" href={about}>{automatic ? s.aiTag : s.aiTagAssisted}</a>
+    </p>
+  </header>
+  {img && <figure class="cover"><img src={img} alt={article.data.image_alt || ''} loading="eager" /></figure>}
+  <div class="body"><Content /></div>
+  <aside class="ai-box">
+    <strong>{s.aiBoxTitle}</strong>
+    <p>{automatic ? s.aiBoxAutomatic : s.aiBoxAssisted}
+      {' '}<a href={about}>{s.about}</a>{SITE.credit !== false && <> · <a href="https://redazia.com" rel="noopener">Redazia</a></>}</p>
+  </aside>
+</article>
+{related.length > 0 && (
+  <section class="related">
+    <h2>{s.more}</h2>
+    <div class="grid">{related.map((a) => <Card article={a} />)}</div>
+  </section>
+)}
+
+<style>
+  .story { max-width: 760px; margin: 0 auto; }
+  .story header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+  h1 { font-size: 42px; margin: 0; overflow-wrap: anywhere; }
+  .standfirst { margin: 0; font: 21px/1.45 var(--article); color: var(--ink-2); }
+  .ai-tag { color: var(--ai); font-weight: 600; text-decoration: none; }
+  .cover { margin: 0 0 28px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius); background: var(--paper); }
+  .cover img { width: 100%; height: 100%; object-fit: cover; }
+  .body { font: 19px/1.7 var(--article); overflow-wrap: break-word; }
+  .body :global(h2) { font-size: 26px; margin: 36px 0 12px; }
+  .body :global(h3) { font-size: 21px; margin: 28px 0 10px; }
+  .body :global(p) { margin: 0 0 18px; }
+  .body :global(a) { color: var(--accent); }
+  .body :global(img) { border-radius: var(--radius); margin: 24px 0; }
+  .body :global(blockquote) { margin: 24px 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent); color: var(--ink-2); }
+  .body :global(sup a) { text-decoration: none; font: 600 12px var(--body); }
+  .body :global(.footnotes), .body :global(section[data-footnotes]) { font: 14px/1.5 var(--body); color: var(--ink-2); }
+  .body :global(.footnotes li) { margin-bottom: 6px; }
+  .body :global(.data-footnote-backref) { text-decoration: none; }
+  .body :global(ul), .body :global(ol) { padding-left: 22px; }
+  .body :global(em) { color: var(--ink-2); }
+  .body :global(table) { border-collapse: collapse; width: 100%; font: 15px var(--body); display: block; overflow-x: auto; }
+  .body :global(th), .body :global(td) { border-bottom: 1px solid var(--line); padding: 8px; text-align: left; }
+  .ai-box { margin: 36px 0 0; padding: 18px 20px; background: var(--ai-bg); border-left: 4px solid var(--ai); border-radius: var(--radius); font-size: 15px; }
+  .ai-box p { margin: 6px 0 0; }
+  .ai-box a { color: var(--ai); }
+  .related { border-top: 3px solid var(--ink); margin: 48px auto 0; padding-top: 10px; }
+  .related h2 { font-size: 24px; margin: 0 0 18px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { h1 { font-size: 30px; } .standfirst { font-size: 18px; } .body { font-size: 18px; } .grid { grid-template-columns: 1fr; } }
+</style>
