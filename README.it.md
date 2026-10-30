@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/redazia-logo-dark.png">
+  <img src="docs/brand/redazia-logo.png" alt="Redazia" height="56">
+</picture>
+
 # Modello di sito per Redazia
 
 Un sito di notizie pronto a ricevere gli articoli da [Redazia](https://redazia.com), la redazione AI: a mano, quando premi **Pubblica** su una bozza approvata, o da solo con la **redazione automatica**. Fatto con [Astro](https://astro.build): statico, veloce, senza cookie, in una o più lingue, con dieci stili pronti (anteprime nel [README in inglese](README.md)).
