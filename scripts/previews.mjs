@@ -26,13 +26,15 @@ for (const theme of Object.keys(THEME_NAMES)) {
   });
 }
 const words = {
-  it: { title: 'Modello di sito Redazia: i dieci stili', lead: 'Ogni stile con gli articoli di esempio, in cinque lingue. Gratuito, licenza MIT.', get: 'Prendi il modello su GitHub', other: 'Anche in' },
-  en: { title: 'Redazia site template: the ten styles', lead: 'Every style with sample articles, in five languages. Free, MIT licence.', get: 'Get the template on GitHub', other: 'Also in' },
-  de: { title: 'Redazia-Websitevorlage: die zehn Stile', lead: 'Jeder Stil mit Beispielartikeln, in fünf Sprachen. Kostenlos, MIT-Lizenz.', get: 'Vorlage auf GitHub holen', other: 'Auch auf' },
-  fr: { title: 'Modèle de site Redazia : les dix styles', lead: 'Chaque style avec des articles d’exemple, en cinq langues. Gratuit, licence MIT.', get: 'Obtenir le modèle sur GitHub', other: 'Aussi en' },
-  es: { title: 'Plantilla de sitio Redazia: los diez estilos', lead: 'Cada estilo con artículos de ejemplo, en cinco idiomas. Gratis, licencia MIT.', get: 'Consigue la plantilla en GitHub', other: 'También en' },
+  it: { title: 'Modello di sito Redazia: i dieci stili', lead: 'Ogni stile con gli articoli di esempio, in cinque lingue. Gratuito, licenza MIT.', get: 'Usa questo modello', how: 'Come metterlo online', code: 'Codice su GitHub', site: 'Cos’è Redazia', other: 'Anche in' },
+  en: { title: 'Redazia site template: the ten styles', lead: 'Every style with sample articles, in five languages. Free, MIT licence.', get: 'Use this template', how: 'How to put it online', code: 'Source on GitHub', site: 'What is Redazia', other: 'Also in' },
+  de: { title: 'Redazia-Websitevorlage: die zehn Stile', lead: 'Jeder Stil mit Beispielartikeln, in fünf Sprachen. Kostenlos, MIT-Lizenz.', get: 'Diese Vorlage verwenden', how: 'So geht sie online', code: 'Quellcode auf GitHub', site: 'Was ist Redazia', other: 'Auch auf' },
+  fr: { title: 'Modèle de site Redazia : les dix styles', lead: 'Chaque style avec des articles d’exemple, en cinq langues. Gratuit, licence MIT.', get: 'Utiliser ce modèle', how: 'Le mettre en ligne', code: 'Code source sur GitHub', site: 'Qu’est-ce que Redazia', other: 'Aussi en' },
+  es: { title: 'Plantilla de sitio Redazia: los diez estilos', lead: 'Cada estilo con artículos de ejemplo, en cinco idiomas. Gratis, licencia MIT.', get: 'Usar esta plantilla', how: 'Cómo ponerla en línea', code: 'Código en GitHub', site: 'Qué es Redazia', other: 'También en' },
 };
 const names = { it: 'Italiano', en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español' };
+// redazia.com in the same language: English at the root, the others under /<lang>/.
+const redazia = (l) => `https://redazia.com/${l === 'en' ? '' : `${l}/`}`;
 const home = (key, l) => `/${key}/${l === 'it' ? '' : `${l}/`}`;
 
 // The page for one language: its words, its screenshots, its links.
@@ -61,7 +63,12 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l}" href="${url}/${l}/
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.55 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
   main { max-width: 72rem; margin: 0 auto; padding: 24px 16px 64px; }
-  nav { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: flex-end; font-size: 0.95rem; margin-bottom: 24px; }
+  header { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; align-items: baseline; font-size: 0.95rem; margin-bottom: 24px; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .brand { font-weight: 600; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; margin: 20px 0 0; }
+  .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; background: var(--accent); color: var(--paper); font-weight: 600; text-decoration: none; }
+  .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
   h1 { font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 8px; }
   .lead { color: var(--ink-2); margin: 0 0 12px; }
   a { color: var(--accent); }
@@ -75,10 +82,14 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l}" href="${url}/${l}/
 </head>
 <body>
 <main>
-  <nav aria-label="Language">${switcher}</nav>
+  <header><a class="brand" href="${redazia(lang)}">${w.site}</a><nav aria-label="Language">${switcher}</nav></header>
   <h1>${w.title}</h1>
   <p class="lead">${w.lead}</p>
-  <p><a href="https://github.com/eullm/redazia-site-template">${w.get}</a></p>
+  <p class="cta">
+    <a class="btn" href="https://github.com/eullm/redazia-site-template/generate">${w.get}</a>
+    <a class="btn ghost" href="${redazia(lang)}guide#template">${w.how}</a>
+    <a href="https://github.com/eullm/redazia-site-template">${w.code}</a>
+  </p>
   <div class="grid">${cards}
   </div>
 </main>
