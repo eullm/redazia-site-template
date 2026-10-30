@@ -55,7 +55,9 @@ function page(lang) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>${w.title}</title>
-<link rel="icon" href="/quotidiano/favicon.svg">
+<link rel="icon" href="/brand/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/brand/apple-touch-icon.png">
 ${languages.map((l) => `<link rel="alternate" hreflang="${l}" href="${url}/${l}/">`).join('\n')}
 <style>
   :root { color-scheme: light dark; --paper: #fbfaf7; --ink: #1d2730; --ink-2: #4a5661; --line: #e2ded4; --accent: #1f6f63; }
@@ -63,9 +65,10 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l}" href="${url}/${l}/
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.55 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
   main { max-width: 72rem; margin: 0 auto; padding: 24px 16px 64px; }
-  header { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; align-items: baseline; font-size: 0.95rem; margin-bottom: 24px; }
+  header { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; align-items: center; font-size: 0.95rem; margin-bottom: 24px; }
   nav { display: flex; flex-wrap: wrap; gap: 6px 14px; }
-  .brand { font-weight: 600; }
+  .brand { display: inline-flex; line-height: 0; }
+  .brand img { height: 34px; width: auto; }
   .cta { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; margin: 20px 0 0; }
   .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; background: var(--accent); color: var(--paper); font-weight: 600; text-decoration: none; }
   .btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
@@ -82,7 +85,10 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l}" href="${url}/${l}/
 </head>
 <body>
 <main>
-  <header><a class="brand" href="${redazia(lang)}">${w.site}</a><nav aria-label="Language">${switcher}</nav></header>
+  <header><a class="brand" href="${redazia(lang)}" title="${w.site}"><picture>
+    <source srcset="/brand/redazia-logo-dark-64.webp 1x, /brand/redazia-logo-dark-128.webp 2x" media="(prefers-color-scheme: dark)">
+    <img src="/brand/redazia-logo-64.webp" srcset="/brand/redazia-logo-64.webp 1x, /brand/redazia-logo-128.webp 2x" alt="Redazia" width="198" height="64">
+  </picture></a><nav aria-label="Language">${switcher}</nav></header>
   <h1>${w.title}</h1>
   <p class="lead">${w.lead}</p>
   <p class="cta">
@@ -121,6 +127,8 @@ function chooser() {
 }
 
 cpSync('docs/themes', `${out}/shots`, { recursive: true });
+cpSync('docs/brand', `${out}/brand`, { recursive: true });
+cpSync('docs/brand/favicon.ico', `${out}/favicon.ico`);
 // One page per language at /<lang>/, and / sends the visitor to theirs.
 for (const lang of languages) {
   mkdirSync(`${out}/${lang}`, { recursive: true });

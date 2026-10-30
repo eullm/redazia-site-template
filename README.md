@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/redazia-logo-dark.png">
+  <img src="docs/brand/redazia-logo.png" alt="Redazia" height="56">
+</picture>
+
 # Redazia site template
 
 A news site ready to receive articles from [Redazia](https://redazia.com), the AI newsroom: by hand, when you press **Publish** on an approved draft, or by itself with the **automatic newsroom**. Built with [Astro](https://astro.build), static, fast, no cookies, in one or more languages, with ten ready-made looks.
