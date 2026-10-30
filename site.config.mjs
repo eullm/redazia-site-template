@@ -11,6 +11,9 @@ export default {
   tagline: {
     it: 'Notizie e approfondimenti, ogni giorno',
     en: 'News and analysis, every day',
+    de: 'Nachrichten und Hintergründe, jeden Tag',
+    fr: 'Actualités et analyses, chaque jour',
+    es: 'Noticias y análisis, cada día',
   },
   // The public address, without a final slash. With `base` set (see below)
   // this is still the domain only: https://example.com, not .../news.
@@ -34,11 +37,11 @@ export default {
   // its front matter, as written in the automatic newsroom's settings); the
   // rest is how each language shows it and the address of its page.
   sections: [
-    { name: 'Attualità', it: { slug: 'attualita', label: 'Attualità' }, en: { slug: 'news', label: 'News' } },
-    { name: 'Economia', it: { slug: 'economia', label: 'Economia' }, en: { slug: 'economy', label: 'Economy' } },
-    { name: 'Tecnologia', it: { slug: 'tecnologia', label: 'Tecnologia' }, en: { slug: 'technology', label: 'Technology' } },
-    { name: 'Scienza', it: { slug: 'scienza', label: 'Scienza' }, en: { slug: 'science', label: 'Science' } },
-    { name: 'Cultura', it: { slug: 'cultura', label: 'Cultura' }, en: { slug: 'culture', label: 'Culture' } },
+    { name: 'Attualità', it: { slug: 'attualita', label: 'Attualità' }, en: { slug: 'news', label: 'News' }, de: { slug: 'aktuelles', label: 'Aktuelles' }, fr: { slug: 'actualite', label: 'Actualité' }, es: { slug: 'actualidad', label: 'Actualidad' } },
+    { name: 'Economia', it: { slug: 'economia', label: 'Economia' }, en: { slug: 'economy', label: 'Economy' }, de: { slug: 'wirtschaft', label: 'Wirtschaft' }, fr: { slug: 'economie', label: 'Économie' }, es: { slug: 'economia', label: 'Economía' } },
+    { name: 'Tecnologia', it: { slug: 'tecnologia', label: 'Tecnologia' }, en: { slug: 'technology', label: 'Technology' }, de: { slug: 'technik', label: 'Technik' }, fr: { slug: 'technologie', label: 'Technologie' }, es: { slug: 'tecnologia', label: 'Tecnología' } },
+    { name: 'Scienza', it: { slug: 'scienza', label: 'Scienza' }, en: { slug: 'science', label: 'Science' }, de: { slug: 'wissenschaft', label: 'Wissenschaft' }, fr: { slug: 'sciences', label: 'Sciences' }, es: { slug: 'ciencia', label: 'Ciencia' } },
+    { name: 'Cultura', it: { slug: 'cultura', label: 'Cultura' }, en: { slug: 'culture', label: 'Culture' }, de: { slug: 'kultur', label: 'Kultur' }, fr: { slug: 'culture', label: 'Culture' }, es: { slug: 'cultura', label: 'Cultura' } },
   ],
 
   // How the articles are written, said to readers on every article:

@@ -61,7 +61,9 @@ An article whose section is not in the list still appears on the home page.
 
 ## Themes
 
-`theme` in `site.config.mjs`, or the environment variable `SITE_THEME` (in Vercel › Settings › Environment Variables) to try one without a commit. `accent` sets your own colour over any theme.
+`theme` in `site.config.mjs`, or the environment variable `SITE_THEME` (in Vercel › Settings › Environment Variables) to try one without a commit. Every theme can be seen live, in five languages, at [demo.redazia.com](https://demo.redazia.com).
+
+`SITE_LANGUAGES` (e.g. `it,en,de`), `SITE_BASE` (e.g. `/news`) and `SITE_URL` change the languages, the folder and the address in the same way. `accent` sets your own colour over any theme.
 
 | Theme | Home | For |
 |---|---|---|

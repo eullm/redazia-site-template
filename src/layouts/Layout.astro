@@ -129,7 +129,7 @@ const rss = href(lang, 'rss.xml');
   .site-header .top { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 20px; padding-top: 20px; padding-bottom: 16px; }
   .logo { font: 800 32px/1.05 var(--heading); text-decoration: none; letter-spacing: -.02em; }
   .tagline { margin: 0; color: var(--muted); font-size: 15px; }
-  .langs { display: flex; gap: 8px; }
+  .langs { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
   .langs a { font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 5px 13px; }
   .langs a:hover { border-color: var(--ink); }
   .sections { border-top: 1px solid var(--line); }
@@ -165,6 +165,9 @@ const rss = href(lang, 'rss.xml');
     .logo, [data-header='masthead'] .logo { grid-column: 1; font-size: 28px; }
     .tagline, [data-header='masthead'] .tagline { grid-column: 1 / -1; grid-row: 2; }
     .langs, [data-header='masthead'] .langs { grid-column: 2; grid-row: 1; }
+    /* Three languages or more: on their own row under the tagline. */
+    .langs:has(a:nth-child(3)), [data-header='masthead'] .langs:has(a:nth-child(3)) { grid-column: 1 / -1; grid-row: 3; justify-content: flex-start; justify-self: start; }
+    .tagline { overflow-wrap: anywhere; }
     [data-header='masthead'] .sections .wrap { justify-content: flex-start; }
     .page-title { font-size: 30px; }
   }
