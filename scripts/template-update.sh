@@ -16,7 +16,7 @@
 # when the site is up to date.
 set -eu
 
-TEMPLATE=${TEMPLATE_REPO:-https://github.com/eullm/redazia-site-template.git}
+TEMPLATE=${TEMPLATE_REPO:-https://github.com/redazia/redazia-site-template.git}
 KEEP=":(exclude)site.config.mjs :(exclude)src/custom :(exclude)src/content/articles :(exclude)public/images :(exclude)public/brand :(exclude).github :(exclude)README.md :(exclude)README.it.md :(exclude).template-version"
 
 git remote get-url template >/dev/null 2>&1 || git remote add template "$TEMPLATE"
