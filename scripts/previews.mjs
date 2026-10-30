@@ -92,9 +92,9 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l}" href="${url}/${l}/
   <h1>${w.title}</h1>
   <p class="lead">${w.lead}</p>
   <p class="cta">
-    <a class="btn" href="https://github.com/eullm/redazia-site-template/generate">${w.get}</a>
+    <a class="btn" href="https://github.com/redazia/redazia-site-template/generate">${w.get}</a>
     <a class="btn ghost" href="${redazia(lang)}guide#template">${w.how}</a>
-    <a href="https://github.com/eullm/redazia-site-template">${w.code}</a>
+    <a href="https://github.com/redazia/redazia-site-template">${w.code}</a>
   </p>
   <div class="grid">${cards}
   </div>

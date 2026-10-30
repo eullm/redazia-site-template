@@ -18,7 +18,7 @@ permissions:
 jobs:
   update:
     # Not in the template itself, only in the sites made from it.
-    if: github.repository != 'eullm/redazia-site-template'
+    if: github.repository != 'redazia/redazia-site-template'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
