@@ -1,5 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import config from '../../site.config.mjs';
+import config from './config.mjs';
 import { DEFAULT_PATHS, LOCALES, STRINGS } from './i18n';
 import { themeNamed } from './themes';
 import type { Lang, Paths, SectionConfig, SiteConfig } from './types';
@@ -11,7 +11,7 @@ export type Section = SectionConfig;
 export const SITE = config as SiteConfig;
 export const LANGS: Lang[] = SITE.languages.length ? SITE.languages : ['it'];
 export const MAIN: Lang = LANGS[0];
-export const THEME = themeNamed(process.env.SITE_THEME || SITE.theme);
+export const THEME = themeNamed(SITE.theme);
 export const BASE = (SITE.base || '').replace(/\/+$/, '');
 
 export function t(lang: Lang) {

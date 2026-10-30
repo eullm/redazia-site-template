@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import site from './site.config.mjs';
+import site from './src/lib/config.mjs';
 
 const LOCALES = { it: 'it-IT', en: 'en-GB', de: 'de-DE', fr: 'fr-FR', es: 'es-ES' };
 const languages = site.languages.length ? site.languages : ['it'];

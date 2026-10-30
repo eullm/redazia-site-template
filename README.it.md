@@ -46,7 +46,9 @@ Pubblica un articolo a mano e controllalo sul sito prima di accendere la redazio
 
 ## Stili
 
-`theme` in `site.config.mjs`, oppure la variabile d'ambiente `SITE_THEME` (in Vercel › Settings › Environment Variables) per provarne uno senza commit. `accent` mette il tuo colore su qualsiasi stile. Gli stili: `quotidiano`, `magazine`, `tech`, `blog`, `minimal`, `locale`, `finanza`, `scienza`, `lifestyle`, `notte`.
+`theme` in `site.config.mjs`, oppure la variabile d'ambiente `SITE_THEME` (in Vercel › Settings › Environment Variables) per provarne uno senza commit. `accent` mette il tuo colore su qualsiasi stile. Gli stili: `quotidiano`, `magazine`, `tech`, `blog`, `minimal`, `locale`, `finanza`, `scienza`, `lifestyle`, `notte`. Si vedono tutti dal vivo, in cinque lingue, su [demo.redazia.com](https://demo.redazia.com).
+
+Allo stesso modo `SITE_LANGUAGES` (es. `it,en,de`), `SITE_BASE` (es. `/news`) e `SITE_URL` cambiano lingue, cartella e indirizzo.
 
 ## Accanto a un sito che c'è già
 
