@@ -78,6 +78,22 @@ An article whose section is not in the list still appears on the home page.
 | `lifestyle` | warm, elegant, cover | travel, food, fashion |
 | `notte` | the newspaper in dark | evening reading |
 
+## Make it yours and keep the updates
+
+Change what you like in these places, and only there:
+
+| Where | What |
+|---|---|
+| `site.config.mjs` | Name, languages, sections, theme, colour, publisher |
+| `src/custom/custom.css` | Your styles, loaded after the theme's |
+| `src/custom/Head.astro` | Anything for `<head>`: fonts, verification tags, analytics |
+| `src/custom/Header.astro`, `Footer.astro` | Create them to replace the header or the footer |
+| `public/brand/` | Logo and other pictures |
+
+Every Monday the **Template update** workflow (`.github/workflows/template-update.yml`) brings the template's improvements into your site as a pull request. Your files above, the articles and the pictures are never touched, so the preview deploy shows the result and you merge it with a click. If you changed a template file too (say `src/layouts/Layout.astro`), the pull request names it so you can look at it.
+
+Turn it on once: **Settings › Actions › General › Allow GitHub Actions to create and approve pull requests**. You can also start it by hand from **Actions › Template update › Run workflow**, or locally with `sh scripts/template-update.sh`.
+
 ## Next to an existing site
 
 Your site cannot receive articles (Squarespace, many site builders)? Keep it, and put this one beside it:
