@@ -1,0 +1,7 @@
+/* Your own styles, loaded after the theme's: they win over it.
+   Template updates never touch this folder (src/custom/), see the README,
+   "Make it yours and keep the updates". For example:
+
+   :root { --accent: #c2185b; }
+   .logo { letter-spacing: 0; }
+*/

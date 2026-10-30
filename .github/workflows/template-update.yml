@@ -1,0 +1,51 @@
+# Every Monday, brings the template's improvements into this site as a pull
+# request: your preview deploy (Vercel, Netlify) shows how it looks, you
+# merge it with a click. Your own files are never touched: site.config.mjs,
+# src/custom/, the articles, the pictures, public/brand/ (README, "Make it
+# yours and keep the updates"). Needs Settings › Actions › General ›
+# "Allow GitHub Actions to create and approve pull requests".
+name: Template update
+
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    # Not in the template itself, only in the sites made from it.
+    if: github.repository != 'eullm/redazia-site-template'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - id: update
+        run: sh scripts/template-update.sh | tee -a "$GITHUB_OUTPUT"
+      - if: steps.update.outputs.branch != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.update.outputs.branch }}
+          BASE: ${{ steps.update.outputs.base }}
+          NEW: ${{ steps.update.outputs.new }}
+          CONFLICTS: ${{ steps.update.outputs.conflicts }}
+        run: |
+          git push --force origin "$BRANCH"
+          gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number' | grep -q . && exit 0
+          {
+            echo "Improvements of the Redazia site template since the last update:"
+            echo
+            git log --format='- %s' "$BASE..$NEW"
+            echo
+            if [ -n "$CONFLICTS" ]; then
+              echo "**These files were changed both here and in the template and need a look:** $CONFLICTS"
+            else
+              echo "Your files (site.config.mjs, src/custom/, articles, pictures) are untouched. Check the preview, then merge."
+            fi
+          } > body.md
+          gh pr create --head "$BRANCH" --base "${{ github.event.repository.default_branch }}" \
+            --title "Template update" --body-file body.md

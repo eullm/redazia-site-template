@@ -2,6 +2,15 @@
 import { LANG_NAMES, LOCALES } from '../lib/i18n';
 import { MONO_FONT } from '../lib/themes';
 import { BASE, LANGS, asset, SITE, THEME, absolute, href, paths, sectionLabel, sectionUrl, t, tagline, type Lang } from '../lib/site';
+import customCss from '../custom/custom.css?raw';
+
+// The site owner's own parts (src/custom/, never touched by template
+// updates): Head.astro always, Header.astro and Footer.astro in place of
+// ours when they exist.
+const custom = import.meta.glob<{ default: any }>('../custom/*.astro', { eager: true });
+const CustomHead = custom['../custom/Head.astro']?.default;
+const CustomHeader = custom['../custom/Header.astro']?.default;
+const CustomFooter = custom['../custom/Footer.astro']?.default;
 
 interface Props {
   lang: Lang;
@@ -32,7 +41,7 @@ const others = LANGS.filter((l) => l !== lang);
 const rss = href(lang, 'rss.xml');
 ---
 <!doctype html>
-<html lang={lang} style={vars} data-header={THEME.header} data-dark={THEME.dark ? '' : undefined}
+<html lang={lang} data-header={THEME.header} data-dark={THEME.dark ? '' : undefined}
       data-caps={THEME.uppercaseNav ? '' : undefined}>
 <head>
   <meta charset="utf-8">
@@ -55,8 +64,11 @@ const rss = href(lang, 'rss.xml');
   {ogImage && <meta property="og:image" content={ogImage}>}
   <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'}>
   {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld).replace(/</g, '\\u003c')} />}
+  {CustomHead && <CustomHead lang={lang} />}
+  <style is:inline set:html={`:root{${vars}}`} />
 </head>
 <body>
+  {customCss.replace(/\/\*[\s\S]*?\*\//g, "").trim() && <style is:inline set:html={customCss} />}
   <a class="skip" href="#main">{s.latest}</a>
   {SITE.ai === 'automatic' && (
     <div class="ai-banner" role="note">
@@ -68,6 +80,7 @@ const rss = href(lang, 'rss.xml');
       </div>
     </div>
   )}
+  {CustomHeader ? <CustomHeader lang={lang} /> : (
   <header class="site-header">
     <div class="wrap top">
       <a class="logo" href={home}>{SITE.name}</a>
@@ -88,9 +101,11 @@ const rss = href(lang, 'rss.xml');
       </div>
     </nav>
   </header>
+  )}
   <main id="main" class="wrap">
     <slot />
   </main>
+  {CustomFooter ? <CustomFooter lang={lang} /> : (
   <footer class="site-footer">
     <div class="wrap">
       <p><strong>{SITE.name}</strong>{tag && <> · {tag}</>}</p>
@@ -104,6 +119,7 @@ const rss = href(lang, 'rss.xml');
         ? <a href={SITE.publisher.url} rel="noopener">{SITE.publisher.name}</a> : SITE.publisher.name}{[SITE.publisher.address, SITE.publisher.vat].filter(Boolean).map((x) => `, ${x}`).join('')}</p>
     </div>
   </footer>
+  )}
 </body>
 </html>
 

@@ -50,6 +50,22 @@ Pubblica un articolo a mano e controllalo sul sito prima di accendere la redazio
 
 Allo stesso modo `SITE_LANGUAGES` (es. `it,en,de`), `SITE_BASE` (es. `/news`) e `SITE_URL` cambiano lingue, cartella e indirizzo.
 
+## Personalizzarlo senza perdere gli aggiornamenti
+
+Cambia quello che vuoi in questi posti, e solo lì:
+
+| Dove | Cosa |
+|---|---|
+| `site.config.mjs` | Nome, lingue, rubriche, stile, colore, editore |
+| `src/custom/custom.css` | I tuoi stili, caricati dopo quelli dello stile |
+| `src/custom/Head.astro` | Ciò che va in `<head>`: caratteri, tag di verifica, statistiche |
+| `src/custom/Header.astro`, `Footer.astro` | Creali per sostituire testata o piè di pagina |
+| `public/brand/` | Logo e altre immagini |
+
+Ogni lunedì l'azione **Template update** (`.github/workflows/template-update.yml`) porta i miglioramenti del modello nel tuo sito come pull request. I tuoi file qui sopra, gli articoli e le immagini non vengono mai toccati: l'anteprima del deploy mostra il risultato e la unisci con un clic. Se hai cambiato anche un file del modello (per esempio `src/layouts/Layout.astro`), la pull request lo indica perché tu lo guardi.
+
+Va accesa una volta: **Settings › Actions › General › Allow GitHub Actions to create and approve pull requests**. Si avvia anche a mano da **Actions › Template update › Run workflow**, o in locale con `sh scripts/template-update.sh`.
+
 ## Accanto a un sito che c'è già
 
 Se il tuo sito non può ricevere articoli (Squarespace, molti costruttori di siti), tienilo e metti questo accanto:
